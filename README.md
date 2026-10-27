@@ -21,6 +21,7 @@ Useful URL flags:
 | `?colliders` | show the collision volumes as wireframes |
 | `?debug` | expose `__veTeleport(x, z, yaw, pitch)`, `__veSet(state)` and `__veDebug()` (state, pose, renderer stats) on `window` for QA scripts |
 | `?export` | download the generated shop as `vinyl-store.glb` once it has rendered |
+| `?nobatch` | skip runtime mesh batching (keeps every object separate, used by the export) |
 
 ## Controls
 
@@ -63,6 +64,9 @@ src/
   interaction/             Interactive/Occluder wrappers and the raycasting interactor
   ui/                      welcome, HUD, panel, touch controls, classic layout
   tools/exportGlb.ts       GLB export of the generated shop
+scripts/
+  export-glb.mjs           headless export to blender/vinyl-store.glb
+  blender/glb_to_blend.py  builds blender/vinyl-store.blend from the GLB
 ```
 
 [`docs/SCENE.md`](docs/SCENE.md) documents the coordinate system, dimensions, scene hierarchy and object names, interaction ids and materials.
@@ -80,23 +84,35 @@ src/
 
 That's all: the interactor raycasts against everything inside `Interactive` and `Occluder` groups, shows the prompt using `verb`, and opens the target on **E** or tap.
 
-### Replacing procedural assets with Blender models
+### Blender project and GLB
 
-Every asset is generated in code, which keeps the repository small and makes the shop data-driven. To swap one for a hand-made model:
+The repository includes the shop as editable assets:
 
-1. Export the current shop with `?export` (or `npm run export:glb`, see below) and import `vinyl-store.glb` into Blender (Y-up glTF; Blender converts to Z-up). Object names match `docs/SCENE.md`, so it's a ready-made reference.
-2. Model the replacement at the same origin and scale (metres, origin as documented for that component), apply transforms and export as GLB to `public/models/`.
-3. Load it in place of the procedural component with Drei's `useGLTF('/models/<name>.glb')`, keeping the same `Interactive` wrapper and footprint.
+| File | What it is |
+| --- | --- |
+| `blender/vinyl-store.glb` | the whole shop exported from the running site: every object separate and named per `docs/SCENE.md`, PBR materials and textures embedded, lights as `KHR_lights_punctual` |
+| `blender/vinyl-store.blend` | the same scene as a Blender 5.2 project: one collection per top-level group, textures packed, a `VisitorCamera` at the spawn point, metric units |
 
-### Exporting the shop as GLB
+Regenerate both after changing the scene:
 
 ```bash
 npm i -D playwright && npx playwright install chromium   # once
 npm run build && npx vite preview --port 4173 &
-npm run export:glb    # writes public/models/vinyl-store.glb
+npm run export:glb                                       # writes blender/vinyl-store.glb
+blender --background --python scripts/blender/glb_to_blend.py -- blender/vinyl-store.glb blender/vinyl-store.blend
 ```
 
-Instanced records export via `EXT_mesh_gpu_instancing`. Their per-instance cover selection is a custom shader feature, so outside this site each instanced sleeve shows the whole cover atlas.
+(`pip install bpy` and `python scripts/blender/glb_to_blend.py <in> <out>` works too, without a Blender install.)
+
+Instanced records export via `EXT_mesh_gpu_instancing`. Their per-instance cover selection is a custom shader feature, so outside this site each instanced sleeve shows the whole cover atlas. At runtime the site also merges static meshes into one per material (`StaticBatch`) to cut draw calls; the export uses `?nobatch` so objects stay separate.
+
+### Replacing procedural assets with Blender models
+
+Every asset is generated in code, which keeps the repository small and makes the shop data-driven. To swap one for a hand-made model:
+
+1. Open `blender/vinyl-store.blend` (or import the GLB). Object names match `docs/SCENE.md`, so it's a ready-made reference for position and scale. glTF is Y-up; Blender maps glTF (x, y, z) to (x, −z, y).
+2. Model the replacement at the same origin and scale (metres, origin as documented for that component), apply transforms and export as GLB to `public/models/`.
+3. Load it in place of the procedural component with Drei's `useGLTF('/models/<name>.glb')`, keeping the same `Interactive` wrapper and footprint.
 
 ## Deployment
 

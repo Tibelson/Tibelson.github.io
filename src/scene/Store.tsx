@@ -337,7 +337,7 @@ export function Store() {
           <RightRack />
         </StaticBatch>
       </group>
-      <StaticBatch>
+      <StaticBatch name="Furnishings">
         <CounterTop />
         <CeilingFixtures />
       </StaticBatch>

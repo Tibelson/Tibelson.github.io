@@ -12,7 +12,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
  * anything inside an `Interactive` group (those need their own identity).
  * Raycast layers are preserved on the merged result.
  */
-export function StaticBatch({ name, children }: { name?: string; children: ReactNode }) {
+export function StaticBatch({ name = 'StaticBatch', children }: { name?: string; children: ReactNode }) {
   const ref = useRef<THREE.Group>(null)
   useLayoutEffect(() => {
     const root = ref.current

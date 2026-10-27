@@ -65,7 +65,7 @@ Door opening: centred at x = 0.85, 1.0 m wide, 2.15 m tall. Shop window: x −2.
 
 ## Scene hierarchy
 
-Object names below are set in code and survive GLB export.
+Object names below are set in code and survive GLB export (`blender/vinyl-store.glb`, `blender/vinyl-store.blend`). At runtime, static meshes inside each group are merged per material by `StaticBatch` to save draw calls; open the site with `?nobatch` to inspect the unmerged hierarchy.
 
 ```
 VinylStore
@@ -86,9 +86,10 @@ VinylStore
 │   ├── RightWallSurface           WoodenPanels + WallMounted (DisplayShelf ×2, sleeves, Posters, large album art)
 │   ├── StorageCabinet             turntable cabinet + CabinetRecords
 │   └── RightRack                  RackRecords
-├── Countertop                     Monitor, TableLamp ×2, Speakers, flat record stack, counter-front posters
-├── CeilingFixtures
-│   └── PendantLights              PendantLight ×6 (Bulb, cord, socket, optional shade, lights)
+├── Furnishings (StaticBatch)
+│   ├── Countertop                 Monitor, TableLamp ×2, Speakers, flat record stack, counter-front posters
+│   └── CeilingFixtures
+│       └── PendantLights          PendantLight ×6 (Bulb, cord, socket, optional shade, lights)
 ├── InteractiveObjects
 │   ├── ProjectRecords             Interactive:record:<projectId> ×N
 │   ├── GenreDividers              Interactive:genre:<categoryId> ×4
@@ -147,7 +148,8 @@ Surface UVs are in world units (`worldBox`, `worldPlane` in `geometry.ts`), and 
 
 ## Performance notes
 
-- Records are `InstancedMesh` runs (about a dozen draw calls for ~4,000 sleeves). Every sleeve picks its artwork from one atlas through a per-instance attribute patched into the standard material.
+- Records are `InstancedMesh` runs (a couple of dozen draw calls for ~4,000 sleeves).
+- `StaticBatch` merges static panels, trims and frames per material: the shop renders in roughly 230 draw calls (down from ~675 unbatched). Every sleeve picks its artwork from one atlas through a per-instance attribute patched into the standard material.
 - Geometries and materials are cached and shared by key.
 - High quality: soft shadows from two spot lights, N8AO ambient occlusion, bloom, AgX tone mapping. Low quality: no shadows, no post-processing, lower pixel ratio. `PerformanceMonitor` drops to low automatically if the frame rate collapses.
 - Contact shadows under furniture are baked-style gradient decals, so they work in both modes.

@@ -2,6 +2,8 @@
 
 A first-person, fully 3D independent record store that doubles as a personal portfolio. Visitors walk the aisles, look at records, signs and gadgets, and press **E** (or tap) to open portfolio panels. A conventional HTML portfolio is always one click away and takes over automatically if WebGL is unavailable.
 
+![First-person view from the entrance](docs/images/entrance-view.png)
+
 Built with React, TypeScript, Three.js, React Three Fiber, Drei and Vite. Deployed to GitHub Pages by GitHub Actions.
 
 ## Quick start

@@ -14,7 +14,7 @@ This document is the integration contract for the 3D shop: coordinates, dimensio
 | Right wall | x = +2.4 (boards) |
 | Rear wall | z = −4.0 (sign, shelving, counter) |
 | Front wall / entrance | z = +4.0 |
-| Visitor spawn | (0.75, 1.65, 3.3), yaw 0.12 rad (looking down the aisle) |
+| Visitor spawn | (0.6, 1.65, 3.65), yaw 0.1 rad (looking down the aisle) |
 
 All values live in [`src/scene/layout.ts`](../src/scene/layout.ts). Furniture components and collision volumes read the same footprints, so editing a footprint there moves both the mesh and its collider.
 
@@ -100,7 +100,7 @@ VinylStore
 │   └── Interactive:shelf:projects invisible hit plane over the rear shelving
 ├── Navigation
 │   ├── SpawnPoint
-│   └── CollisionVolumes           Collider_<footprint name> (wireframe, visible with ?debug)
+│   └── CollisionVolumes           Collider_<footprint name> (wireframe, visible with ?colliders)
 └── Lighting
     ├── AmbientLighting            hemisphere + ambient
     └── Environment                local light-cards for reflections (not exported)

@@ -1,5 +1,5 @@
 import { categories, featuredProject, owner, projects } from '../data/portfolio'
-import { setState, useStore } from '../state/store'
+import { getState, setState, useStore } from '../state/store'
 import { About, Contact, Experience, Home, ProjectDetail } from './content'
 
 /**
@@ -28,7 +28,8 @@ export function Classic() {
             <button
               className="btn small primary"
               onClick={() => {
-                setState({ classic: false })
+                // the scene remounts, so show the welcome screen again unless still loading
+                setState({ classic: false, panel: null, mode: getState().mode === 'loading' ? 'loading' : 'welcome' })
                 history.replaceState(null, '', location.pathname)
               }}
             >

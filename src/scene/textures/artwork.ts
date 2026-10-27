@@ -278,9 +278,11 @@ export const mainSignTexture = () =>
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = '#c8461d'
-    ctx.font = `700 96px ${FONT_DISPLAY}`
-    ctx.fillText('VINYL', W / 2, H * 0.3)
-    ctx.fillText('ECSTATIC', W / 2, H * 0.72)
+    // letters fill the face like the reference lightbox
+    const fs = fitText(ctx, 'ECSTATIC', '700', FONT_DISPLAY, 118, W * 0.8)
+    ctx.font = `700 ${fs}px ${FONT_DISPLAY}`
+    ctx.fillText('VINYL', W / 2, H * 0.28)
+    ctx.fillText('ECSTATIC', W / 2, H * 0.74)
     return toTexture(c, { anisotropy: 16 })
   })
 

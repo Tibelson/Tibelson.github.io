@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { interactions, owner, type SectionId } from '../data/portfolio'
 import { input } from '../controls/input'
-import { getState, openPanel, setState, useStore } from '../state/store'
+import { chooseQuality, getState, openPanel, setState, useStore, walkMode } from '../state/store'
 import { SECTION_TITLES } from './content'
 
 const SECTIONS: SectionId[] = ['home', 'projects', 'experience', 'about', 'contact']
@@ -72,7 +72,7 @@ export function Welcome() {
         </div>
         <label className="quality">
           Graphics
-          <select value={quality} onChange={(e) => setState({ quality: e.target.value as 'high' | 'low' })}>
+          <select value={quality} onChange={(e) => chooseQuality(e.target.value as 'high' | 'low')}>
             <option value="high">High</option>
             <option value="low">Low (faster)</option>
           </select>
@@ -101,7 +101,7 @@ export function Crosshair() {
       <div className="prompt" aria-live="polite">
         {it && (
           <span className="pill">
-            {isTouch ? 'Tap' : <><kbd>E</kbd> to</>} {it.verb}
+            {isTouch ? 'Tap to' : <><kbd>E</kbd> to</>} {it.verb}
           </span>
         )}
       </div>
@@ -142,15 +142,15 @@ export function Hud() {
         <button
           className="btn small"
           aria-pressed={mode === 'overview'}
-          onClick={() => setState({ mode: mode === 'overview' ? 'paused' : 'overview' })}
+          onClick={() => setState({ mode: mode === 'overview' ? walkMode() : 'overview' })}
           title="Toggle a bird's-eye view of the shop"
         >
           {mode === 'overview' ? 'Walk' : 'Overview'}
         </button>
-        <button className="btn small" onClick={() => setState((s) => ({ resetToken: s.resetToken + 1, mode: s.mode === 'overview' ? 'paused' : s.mode }))} title="Return to the entrance">
+        <button className="btn small" onClick={() => setState((s) => ({ resetToken: s.resetToken + 1, mode: s.mode === 'overview' ? walkMode() : s.mode }))} title="Return to the entrance">
           Reset
         </button>
-        <button className="btn small" onClick={() => setState({ quality: quality === 'high' ? 'low' : 'high' })} title="Toggle graphics quality">
+        <button className="btn small" onClick={() => chooseQuality(quality === 'high' ? 'low' : 'high')} title="Toggle graphics quality">
           {quality === 'high' ? 'HQ' : 'LQ'}
         </button>
         <button className="btn small" onClick={() => setState({ classic: true })}>

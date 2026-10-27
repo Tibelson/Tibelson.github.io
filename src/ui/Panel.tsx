@@ -32,6 +32,14 @@ export function Panel() {
     ref.current?.scrollTo?.(0, 0)
   }, [panel])
 
+  // Escape closes from anywhere, not only when focus is inside the dialog
+  useEffect(() => {
+    if (!panel) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closePanel()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [panel])
+
   useEffect(() => {
     if (panel) return
     const el = returnFocus.current as HTMLElement | null
@@ -50,10 +58,6 @@ export function Panel() {
   }
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      e.stopPropagation()
-      closePanel()
-    }
     if (e.key === 'Tab' && ref.current) {
       const f = ref.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
       if (!f.length) return

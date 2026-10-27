@@ -241,7 +241,7 @@ function Lighting() {
   return (
     <group name="Lighting">
       <group name="AmbientLighting">
-        <hemisphereLight args={['#ffd9ae', '#3b2414', quality === 'low' ? 0.55 : 0.35]} />
+        <hemisphereLight args={['#ffd9ae', '#2a170c', quality === 'low' ? 0.4 : 0.3]} />
         <ambientLight color="#ffcf9a" intensity={0.05} />
       </group>
       {/* Local reflections from warm "light cards" so metal and vinyl have something to reflect. */}
@@ -268,7 +268,7 @@ function CeilingFixtures() {
 
 /** Spawn point and debug-visible collision volumes. */
 function Navigation() {
-  const debug = useMemo(() => new URLSearchParams(location.search).has('debug'), [])
+  const debug = useMemo(() => new URLSearchParams(location.search).has('colliders'), [])
   const colliders = useMemo(() => buildColliders(), [])
   const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#ff0044', wireframe: true }), [])
   return (

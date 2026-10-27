@@ -30,7 +30,7 @@ export const PLAYER = {
   radius: 0.22,
   walkSpeed: 2.2,
   runSpeed: 3.6,
-  spawn: { x: 0.75, z: 3.3, yaw: 0.12 },
+  spawn: { x: 0.6, z: 3.65, yaw: 0.1 },
 } as const
 
 /** Axis-aligned footprint on the floor plane plus a height. */

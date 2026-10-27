@@ -27,19 +27,17 @@ export function canvas(w: number, h: number) {
 }
 
 export interface TexOptions {
-  repeat?: [number, number]
   srgb?: boolean
   anisotropy?: number
+  /** Surfaces use world-space UVs well beyond 0..1, so they must tile. */
+  tile?: boolean
 }
 
-export function toTexture(c: HTMLCanvasElement, { repeat, srgb = true, anisotropy = 8 }: TexOptions = {}) {
+export function toTexture(c: HTMLCanvasElement, { srgb = true, anisotropy = 8, tile = false }: TexOptions = {}) {
   const t = new THREE.CanvasTexture(c)
   t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace
   t.anisotropy = anisotropy
-  if (repeat) {
-    t.wrapS = t.wrapT = THREE.RepeatWrapping
-    t.repeat.set(repeat[0], repeat[1])
-  }
+  if (tile) t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.needsUpdate = true
   return t
 }

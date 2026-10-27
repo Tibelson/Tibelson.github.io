@@ -80,7 +80,8 @@ export default function Experience() {
       <color attach="background" args={['#0d0907']} />
       <fog attach="fog" args={['#120c08', 9, 22]} />
       <RendererSettings high={high} />
-      <PerformanceMonitor onDecline={() => getState().quality === 'high' && setState({ quality: 'low' })} />
+      {/* one-way, non-persisted downgrade if high quality can't hold ~28 fps */}
+      <PerformanceMonitor bounds={() => [28, 1000]} flipflops={1} onDecline={() => getState().quality === 'high' && setState({ quality: 'low' })} />
       <Suspense fallback={null}>
         <Store />
         <ReadySignal />

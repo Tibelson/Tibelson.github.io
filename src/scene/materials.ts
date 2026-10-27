@@ -56,7 +56,7 @@ export const brickMaterial = () =>
       name: 'Brick_Exposed',
       map: t.map,
       bumpMap: t.bump,
-      bumpScale: 4,
+      bumpScale: 2.5,
       roughness: 0.92,
     })
   })

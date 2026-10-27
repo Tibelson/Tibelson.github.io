@@ -58,9 +58,17 @@ export function setState(patch: Partial<AppState> | ((s: AppState) => Partial<Ap
   for (const k in p) if ((p as Record<string, unknown>)[k] !== (state as unknown as Record<string, unknown>)[k]) changed = true
   if (!changed) return
   state = { ...state, ...p }
-  if (p.quality) localStorageSet('ve-quality', p.quality)
   listeners.forEach((l) => l())
 }
+
+/** Quality picked by the visitor: applied and remembered. Automatic downgrades use setState and are not persisted. */
+export function chooseQuality(quality: Quality) {
+  setState({ quality })
+  localStorageSet('ve-quality', quality)
+}
+
+/** Mode to return to from overlays: touch devices have no "click to resume" step. */
+export const walkMode = (): Mode => (state.isTouch ? 'explore' : 'paused')
 
 export function subscribe(l: () => void) {
   listeners.add(l)

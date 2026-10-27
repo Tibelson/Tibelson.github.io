@@ -18,7 +18,8 @@ Useful URL flags:
 | Flag | Effect |
 | --- | --- |
 | `?classic` | open the plain HTML portfolio |
-| `?debug` | show collision volumes, expose `__veTeleport(x, z, yaw, pitch)` and `__veDebug()` on `window` |
+| `?colliders` | show the collision volumes as wireframes |
+| `?debug` | expose `__veTeleport(x, z, yaw, pitch)`, `__veSet(state)` and `__veDebug()` (state, pose, renderer stats) on `window` for QA scripts |
 | `?export` | download the generated shop as `vinyl-store.glb` once it has rendered |
 
 ## Controls

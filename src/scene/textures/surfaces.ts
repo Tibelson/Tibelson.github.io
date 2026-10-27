@@ -83,7 +83,7 @@ export const floorPlanks = () =>
       while (y < S) {
         const len = S * (0.4 + r() * 0.45)
         const hue = 26 + r() * 8
-        const light = 24 + r() * 12
+        const light = 20 + r() * 18
         const sat = 45 + r() * 15
         // draw twice when wrapping so the tile stays seamless vertically
         for (const yy of [y, y - S, y + S]) {
@@ -104,8 +104,8 @@ export const floorPlanks = () =>
           rx.fillRect(x + plankW * 0.25, yy + len * 0.1, plankW * 0.5, len * 0.8)
           // gaps
           ctx.fillStyle = 'rgba(15,8,3,0.9)'
-          ctx.fillRect(x, yy, 2, len)
-          ctx.fillRect(x, yy + len - 2, plankW, 2)
+          ctx.fillRect(x, yy, 3, len)
+          ctx.fillRect(x, yy + len - 3, plankW, 3)
           // nails
           ctx.fillStyle = 'rgba(20,14,10,0.8)'
           for (const ny of [yy + 10, yy + len - 14]) {
@@ -125,7 +125,7 @@ export const floorPlanks = () =>
       ctx.fillRect(0, 0, S, S)
     }
     speckle(ctx, 0, 0, S, S, 6000, r, ['rgba(0,0,0,0.15)', 'rgba(255,230,190,0.07)'], 1.5)
-    return { map: toTexture(c), bump: toTexture(b, { srgb: false }), rough: toTexture(ro, { srgb: false }) }
+    return { map: toTexture(c, { tile: true }), bump: toTexture(b, { srgb: false, tile: true }), rough: toTexture(ro, { srgb: false, tile: true }) }
   })
 
 /** Weathered horizontal cladding for rear/right walls. Tile = 2 m x 2 m. */
@@ -173,8 +173,8 @@ export const wallBoards = () =>
       }
     }
     speckle(ctx, 0, 0, S, S, 5000, r, ['rgba(0,0,0,0.18)', 'rgba(255,240,220,0.06)'], 1.5)
-    const bump = toTexture(b, { srgb: false })
-    return { map: toTexture(c), bump, rough: bump }
+    const bump = toTexture(b, { srgb: false, tile: true })
+    return { map: toTexture(c, { tile: true }), bump, rough: bump }
   })
 
 /** Reddish-brown exposed brick. Tile = 1.5 m x 1.5 m. */
@@ -229,7 +229,7 @@ export const brick = () =>
         bx.beginPath()
         bx.roundRect(x + 1, y + 1, w - 2, h - 2, 4)
         bx.fill()
-        speckle(bx, x, y, w, h, 30, r, ['rgba(0,0,0,0.3)'], 3)
+        speckle(bx, x, y, w, h, 12, r, ['rgba(0,0,0,0.25)'], 2.5)
       }
     }
     // soot / age gradient towards the ceiling
@@ -238,8 +238,8 @@ export const brick = () =>
     g.addColorStop(1, 'rgba(10,5,0,0)')
     ctx.fillStyle = g
     ctx.fillRect(0, 0, S, S)
-    const bump = toTexture(b, { srgb: false })
-    return { map: toTexture(c), bump, rough: bump }
+    const bump = toTexture(b, { srgb: false, tile: true })
+    return { map: toTexture(c, { tile: true }), bump, rough: bump }
   })
 
 /** Slightly aged off-white ceiling. Tile = 2 m. */
@@ -260,7 +260,7 @@ export const plaster = () =>
       ctx.fillRect(0, 0, S, S)
     }
     speckle(ctx, 0, 0, S, S, 4000, r, ['rgba(0,0,0,0.05)', 'rgba(255,255,255,0.08)'], 1.5)
-    return toTexture(c)
+    return toTexture(c, { tile: true })
   })
 
 /** Furniture wood. Grain runs along V. `tone` picks honey, dark-stained or pale. */
@@ -296,8 +296,8 @@ export const furnitureWood = (tone: 'honey' | 'dark' | 'pale' | 'black' = 'honey
     bx.fillStyle = '#999'
     bx.fillRect(0, 0, S, S)
     grain(bx, 0, 0, S, S, rng(9), true, 0.4, 'rgba(0,0,0,', 'rgba(255,255,255,')
-    const bump = toTexture(b, { srgb: false })
-    return { map: toTexture(c), bump, rough: bump }
+    const bump = toTexture(b, { srgb: false, tile: true })
+    return { map: toTexture(c, { tile: true }), bump, rough: bump }
   })
 
 /** Soft dark blob used as a cheap contact shadow under furniture. */

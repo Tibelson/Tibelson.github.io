@@ -16,7 +16,7 @@ export function StaticBatch({ name, children }: { name?: string; children: React
   const ref = useRef<THREE.Group>(null)
   useLayoutEffect(() => {
     const root = ref.current
-    if (!root) return
+    if (!root || new URLSearchParams(location.search).has('nobatch')) return
     root.updateWorldMatrix(true, true)
     const inv = new THREE.Matrix4().copy(root.matrixWorld).invert()
     const buckets = new Map<string, { material: THREE.Material; meshes: THREE.Mesh[]; layers: number; cast: boolean; receive: boolean }>()
